@@ -1,0 +1,24 @@
+# Local execution state and plan files
+*.tfplan
+*.tfstate
+*.tfstate.*
+*.tfstate.backup
+tfplan
+
+# Terraform initialization directory (contains provider binaries)
+.terraform/
+
+# Crash logs
+crash.log
+crash.*.log
+
+# Terraform CLI configuration
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Sensitive variables files (if containing real secrets)
+*.tfvars
+*.tfvars.json
+!example.tfvars

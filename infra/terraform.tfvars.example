@@ -1,0 +1,4 @@
+project_id      = "your-gcp-project-id"
+region          = "europe-west1"
+service_name    = "panneaux-libres"
+container_image = "europe-west1-docker.pkg.dev/your-gcp-project-id/panneaux-libres/panneaux-libres:latest"
