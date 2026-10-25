@@ -59,4 +59,5 @@ jobs:
             --image="$IMAGE" \
             --region="$GCP_REGION" \
             --project="$GCP_PROJECT_ID" \
+            --service-account="cloud-run-runtime@${GCP_PROJECT_ID}.iam.gserviceaccount.com" \
             --quiet

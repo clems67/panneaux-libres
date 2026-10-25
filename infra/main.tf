@@ -92,6 +92,17 @@ resource "google_service_account_iam_member" "compute_service_account_user" {
 }
 
 # --------------------------------------------------
+# Cloud Run runtime service account
+# --------------------------------------------------
+
+resource "google_service_account" "cloud_run_runtime" {
+  project      = google_project.app.project_id
+  account_id   = "cloud-run-runtime"
+  display_name = "Cloud Run Runtime Service Account"
+  description  = "Identity used by the running Cloud Run application"
+}
+
+# --------------------------------------------------
 # Workload Identity Pool
 # --------------------------------------------------
 
@@ -139,16 +150,11 @@ resource "google_iam_workload_identity_pool_provider" "github" {
   ]
 }
 
-# --------------------------------------------------
-# Allow GitHub's federated identity to impersonate
-# the deployment service account
-# --------------------------------------------------
+resource "google_service_account_iam_member" "github_actions_runtime_user" {
+  service_account_id = google_service_account.cloud_run_runtime.name
 
-resource "google_service_account_iam_member" "github_workload_identity_user" {
-  service_account_id = google_service_account.github_actions.name
-  role               = "roles/iam.workloadIdentityUser"
-
-  member = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.github.name}/attribute.repository/${var.github_repo}"
+  role   = "roles/iam.serviceAccountUser"
+  member = "serviceAccount:${google_service_account.github_actions.email}"
 }
 
 resource "google_cloud_run_v2_service" "app" {
@@ -163,7 +169,7 @@ resource "google_cloud_run_v2_service" "app" {
   deletion_protection = true
 
   template {
-    service_account = google_service_account.github_actions.account_id
+    service_account = google_service_account.cloud_run_runtime.email
 
     timeout = "60s"
 
@@ -200,6 +206,7 @@ resource "google_cloud_run_v2_service" "app" {
 
   depends_on = [
     google_project_service.apis,
+    google_service_account_iam_member.github_actions_runtime_user,
   ]
 }
 
