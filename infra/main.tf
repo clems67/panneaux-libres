@@ -82,6 +82,16 @@ resource "google_project_iam_member" "cloud_run_developer" {
   member  = "serviceAccount:${google_service_account.github_actions.email}"
 }
 
+# Allow the GitHub Actions identity to impersonate
+# the GitHub Actions service account.
+resource "google_service_account_iam_member" "github_actions_wif" {
+  service_account_id = google_service_account.github_actions.name
+
+  role = "roles/iam.workloadIdentityUser"
+
+  member = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.github.name}/attribute.repository/${var.github_repo}"
+}
+
 # Allow deployment SA to attach the default Compute Engine
 # service account as the Cloud Run runtime identity.
 resource "google_service_account_iam_member" "compute_service_account_user" {
