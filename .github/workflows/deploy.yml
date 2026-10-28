@@ -47,8 +47,13 @@ jobs:
       - name: Build and push container image
         env:
           IMAGE: ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/${{ vars.ARTIFACT_REPO }}/${{ vars.CLOUD_RUN_SERVICE }}:${{ github.sha }}
+          PUBLIC_SUPABASE_URL: ${{ vars.PUBLIC_SUPABASE_URL }}
+          PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ vars.PUBLIC_SUPABASE_PUBLISHABLE_KEY }}
         run: |
-          docker build --tag "$IMAGE" .
+          docker build \
+            --build-arg PUBLIC_SUPABASE_URL="$PUBLIC_SUPABASE_URL" \
+            --build-arg PUBLIC_SUPABASE_PUBLISHABLE_KEY="$PUBLIC_SUPABASE_PUBLISHABLE_KEY" \
+            --tag "$IMAGE" .
           docker push "$IMAGE"
 
       - name: Deploy to Cloud Run
