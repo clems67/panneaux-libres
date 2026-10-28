@@ -8,14 +8,14 @@ RUN npm ci
 
 COPY . .
 
-RUN npm run build
-RUN npm prune --omit=dev
-
 ARG PUBLIC_SUPABASE_URL
 ARG PUBLIC_SUPABASE_PUBLISHABLE_KEY
 
 ENV PUBLIC_SUPABASE_URL=${PUBLIC_SUPABASE_URL}
 ENV PUBLIC_SUPABASE_PUBLISHABLE_KEY=${PUBLIC_SUPABASE_PUBLISHABLE_KEY}
+
+RUN npm run build
+RUN npm prune --omit=dev
 
 # Stage 2: Run the application
 FROM node:26-alpine AS runner
