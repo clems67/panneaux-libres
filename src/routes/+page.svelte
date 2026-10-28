@@ -59,7 +59,7 @@
 			});
 
 			if (map != undefined) {
-				panneaux.forEach((element) => {
+				panneaux.forEach((element: { latitude: number; longitude: number; status: boolean; id: string | number | boolean; }) => {
 					L.marker([element.latitude, element.longitude], {
 						icon: element.status ? greenIcon : redIcon
 					})
