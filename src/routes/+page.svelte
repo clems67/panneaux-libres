@@ -23,7 +23,12 @@
 					'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 			}).addTo(map);
 
-			const response = await fetch('/api/panneaux');
+			const response = await fetch('/api/panneaux', {
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
 
 			if (!response.ok) {
 				throw new Error(`HTTP error: ${response.status}`);
@@ -57,7 +62,15 @@
 				panneaux.forEach((element) => {
 					L.marker([element.latitude, element.longitude], {
 						icon: element.status ? greenIcon : redIcon
-					}).addTo(map);
+					})
+						.bindPopup(
+							`<a href="https://www.google.com/maps?q=${element.latitude},${element.longitude}" target="_blank" rel="noopener noreferrer">Google Maps</a>
+							<br>
+							<br>
+							<a href="/confirmer_panneau?id=${encodeURIComponent(element.id)}&status=${element.status}">Changer le statut</a>
+							`
+						)
+						.addTo(map);
 				});
 			}
 		});
