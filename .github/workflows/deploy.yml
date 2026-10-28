@@ -67,4 +67,5 @@ jobs:
             --region="$GCP_REGION" \
             --project="$GCP_PROJECT_ID" \
             --service-account="cloud-run-runtime@${GCP_PROJECT_ID}.iam.gserviceaccount.com" \
+            --update-env-vars="PUBLIC_SUPABASE_URL=${PUBLIC_SUPABASE_URL},PUBLIC_SUPABASE_PUBLISHABLE_KEY=${PUBLIC_SUPABASE_PUBLISHABLE_KEY}" \
             --quiet
