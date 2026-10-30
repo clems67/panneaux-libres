@@ -5,6 +5,34 @@
 
 	const CENTER: [number, number] = [48.576, 7.75];
 	const ZOOM = 13;
+	const STORAGE_KEY = 'panneaux-libres:map-view';
+
+	type MapView = { center: [number, number]; zoom: number };
+
+	function loadMapView(): MapView {
+		try {
+			const raw = localStorage.getItem(STORAGE_KEY);
+			if (raw) {
+				const parsed = JSON.parse(raw) as Partial<MapView> | null;
+				const center = parsed?.center;
+				const zoom = parsed?.zoom;
+
+				if (
+					Array.isArray(center) &&
+					center.length === 2 &&
+					center.every((value) => typeof value === 'number' && Number.isFinite(value)) &&
+					typeof zoom === 'number' &&
+					Number.isFinite(zoom)
+				) {
+					return { center: [center[0], center[1]], zoom };
+				}
+			}
+		} catch {
+			// Ignore invalid or inaccessible storage and fall back to the defaults.
+		}
+
+		return { center: CENTER, zoom: ZOOM };
+	}
 
 	let mapElement: HTMLDivElement;
 
@@ -15,7 +43,23 @@
 		void import('leaflet').then(async ({ default: L }) => {
 			if (destroyed) return;
 
-			map = L.map(mapElement).setView(CENTER, ZOOM);
+			const initialView = loadMapView();
+
+			map = L.map(mapElement).setView(initialView.center, initialView.zoom);
+
+			map.on('moveend', () => {
+				const center = map.getCenter();
+				const view: MapView = {
+					center: [center.lat, center.lng],
+					zoom: map.getZoom()
+				};
+
+				try {
+					localStorage.setItem(STORAGE_KEY, JSON.stringify(view));
+				} catch {
+					// Ignore storage failures (private mode, quota, etc.).
+				}
+			});
 
 			L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 				maxZoom: 19,
