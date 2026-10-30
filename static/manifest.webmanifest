@@ -1,7 +1,7 @@
 {
 	"id": "/",
-	"name": "Panneaux Libres",
-	"short_name": "Panneaux",
+	"name": "Coordination Groupes d'Action",
+	"short_name": "Coordination GA",
 	"description": "Carte des panneaux d'affichage libres autour de vous.",
 	"lang": "fr",
 	"dir": "ltr",
