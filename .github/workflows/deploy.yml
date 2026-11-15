@@ -25,6 +25,7 @@ jobs:
       SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
       SUPABASE_DB_PASSWORD: ${{ secrets.PRODUCTION_DB_PASSWORD }}
       SUPABASE_PROJECT_ID: ${{ secrets.PRODUCTION_PROJECT_ID }}
+      SUPABASE_DB_URL: ${{ secrets.PRODUCTION_DATABASE_URL }}
 
     steps:
       - name: Check out repository
@@ -37,7 +38,7 @@ jobs:
         run: supabase link --project-ref "$SUPABASE_PROJECT_ID"
 
       - name: Apply migrations
-        run: supabase db push --remote --yes
+        run: supabase db push --db-url "$SUPABASE_DB_URL" --yes
 
   # 2. Build and deploy Cloud Run
   deploy:
