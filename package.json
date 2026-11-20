@@ -45,7 +45,8 @@
 		"#lib/*": "./src/lib/*"
 	},
 	"dependencies": {
-		"@supabase/supabase-js": "^2.118.0",
+		"@supabase/ssr": "^0.12.7",
+		"@supabase/supabase-js": "^2.119.2",
 		"leaflet": "^1.9.4"
 	}
 }
