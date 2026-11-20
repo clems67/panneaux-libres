@@ -3,7 +3,7 @@
 	//isIos = /iphone|ipad|ipod/i.test(navigator.userAgent);
 </script>
 
-<div class="shrink-0">
+<a href="/installer" class="shrink-0">
 	<button
 		type="button"
 		class="flex items-center gap-2 rounded-full bg-white px-3 py-2 text-sm font-semibold whitespace-nowrap text-[#4c0297] shadow-sm transition hover:bg-violet-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:px-4"
@@ -25,4 +25,4 @@
 		<span class="hidden sm:inline">Installer l'app</span>
 		<span class="sm:hidden">Installer</span>
 	</button>
-</div>
+</a>
