@@ -3,18 +3,19 @@
 	import Install from '#lib/components/Install.svelte';
 	import { invalidate } from '$app/navigation';
 	import { onMount } from 'svelte';
-	
+	import MenuIcon from '@lucide/svelte/icons/menu';
+	import { Menu, Portal } from '@skeletonlabs/skeleton-svelte';
 
-	let { data, children } = $props()
-	let { supabase, claims } = $derived(data)
+	let { data, children } = $props();
+	let { supabase, claims } = $derived(data);
 	onMount(() => {
 		const { data } = supabase.auth.onAuthStateChange((event, _session) => {
 			if (_session?.expires_at !== claims?.exp) {
-				invalidate('supabase:auth')
+				invalidate('supabase:auth');
 			}
-		})
-		return () => data.subscription.unsubscribe()
-	})
+		});
+		return () => data.subscription.unsubscribe();
+	});
 </script>
 
 <svelte:head>
@@ -28,9 +29,9 @@
 
 <div class="flex h-dvh flex-col">
 	<header
-		class="relative z-[1000] flex h-[10dvh] max-h-24 min-h-14 shrink-0 items-center justify-between gap-3 bg-[#4c0297] px-4 text-white shadow-md"
+		class="relative z-[1000] flex h-[10dvh] max-h-24 min-h-14 shrink-0 items-center justify-between gap-3 bg-[#4c0297] px-3 text-white shadow-md"
 	>
-		<div class="flex min-w-0 items-center gap-3">
+		<div class="flex items-center">
 			<img
 				src="/icons/icon-192.png"
 				alt=""
@@ -38,7 +39,24 @@
 				height="36"
 				class="h-9 w-9 shrink-0 rounded-lg"
 			/>
-			<h1 class="truncate text-base font-semibold sm:text-lg">Panneaux Libres</h1>
+			<Menu>
+				<Menu.Trigger class="btn">
+					<MenuIcon />
+				</Menu.Trigger>
+
+				<Menu.Positioner>
+					<Menu.Content>
+						<Menu.Item value="new">
+							<Menu.ItemText>New File</Menu.ItemText>
+						</Menu.Item>
+						<Menu.Item value="open">
+							<Menu.ItemText>Open File</Menu.ItemText>
+						</Menu.Item>
+					</Menu.Content>
+				</Menu.Positioner>
+			</Menu>
+
+			<h2 class="truncate text-base font-semibold sm:text-sm">Panneaux Libres</h2>
 		</div>
 
 		<Install />
