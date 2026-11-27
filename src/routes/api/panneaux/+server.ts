@@ -16,7 +16,10 @@ export const GET: RequestHandler = async ({ locals }) => {
 
 	const { data, error } = await locals.supabase.from('panneaux').select('*');
 
-	if (error) return Response.json({ error: error.message }, { status: 500 });
+	if (error) {
+		console.error('Failed to fetch panneaux:', error);
+		return Response.json({ error: error.message }, { status: 500 });
+	}
 
 	return Response.json({ panneaux: data ?? [] });
 };
